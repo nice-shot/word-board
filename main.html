@@ -69,6 +69,8 @@
     const grid = document.querySelector('.grid');
     const cells = [];
     const words = []
+    const alphabet = 'דימלכסיידיעאהבהגבתיז';
+    const solution = ["כלמידיה", "זיבה", "איידס", "עגבת"];
     let word = []
     let selectedColor = 'orange';
 
@@ -76,8 +78,6 @@
     function createGridCells() {
       grid.innerHTML = '';
       cells.length = 0;
-      const alphabet = 'דימלכסיידיעאהבהגבתיז';
-      const solution = ["כלמידיה", "זיבה", "איידס", "עגבת"];
 
       for (let i = 0; i < 20; i++) {
         const cell = document.createElement('div');
@@ -202,6 +202,15 @@
     }
 
     function checkWinCondition() {
+      wrdList = [translateWordToString(word)];
+      for (let i = 0; i < words.length; i++) {
+        wrdList.push(translateWordToString(words[i]));
+      }
+
+      for (let i = 0; i < solution.length; i++) {
+        if (!wrdList.includes(solution[i])) return false;
+      }
+
       return true;
     }
 
