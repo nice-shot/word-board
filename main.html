@@ -65,7 +65,7 @@
     const wordElement = document.querySelector('.word');
     const grid = document.querySelector('.grid');
     const cells = [];
-    const selectedCells = [];
+    const words = []
     const word = []
     let selectedColor = 'orange';
 
@@ -105,10 +105,14 @@
       cell.classList.toggle('selected')
 
       updateBoard();
+      updateWordSign();
     }
     
     function updateWordSign() { 
-      wordElement.textContent = word.join('');
+      wordElement.textContent = '';
+      for (let i = 0; i < word.length; i++) {
+        wordElement.textContent += word[i].textContent
+      }
     }
 
     function updateBoard() {
