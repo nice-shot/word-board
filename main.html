@@ -113,16 +113,11 @@
     }
     
     function updateWordSign() { 
-      wordElement.textContent = '';
-      for (let i = 0; i < word.length; i++) {
-        wordElement.textContent += word[i].textContent
-      }
+      wordElement.textContent = translateWordToString(word);
       
       listElement.textContent = '';
       for (let i = 0; i < words.length; i++) {
-        for (let j = 0; j < words[i].length; j++) {
-          listElement.textContent += words[i][j].textContent;
-        }
+        listElement.textContent += translateWordToString(words[i]);
         listElement.textContent += " ";
       }
       
@@ -212,6 +207,15 @@
 
     function isNewWord() {
       return (word.length == 0)
+    }
+
+    function translateWordToString(wordArr) {
+      let s = ''
+      for (let i = 0; i < wordArr.length; i++) {
+        s += wordArr[i].textContent;
+      }
+
+      return s;
     }
 
     // Get random color
