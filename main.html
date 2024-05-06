@@ -68,7 +68,6 @@
     const selectedCells = [];
     const word = []
     let selectedColor = 'orange';
-    let newWord = true;
 
     // Create grid cells
     function createGridCells() {
@@ -95,14 +94,12 @@
       const cell = event.target;
       const index = cells.indexOf(cell);
       
-      if (newWord == false && cell == word[word.length - 1]) {
+      if (isNewWord() == false && cell == word[word.length - 1]) {
         word.pop();
-        if (word.length == 0) newWord = true;
         cell.style.backgroundColor = '';
       } else {
         word.push(cell);
         cell.style.backgroundColor = selectedColor;
-        newWord = false
       }
       
       cell.classList.toggle('selected')
@@ -110,8 +107,7 @@
       updateBoard();
     }
     
-    function updateWordSign() {
-      console.log(selectedCells); 
+    function updateWordSign() { 
       wordElement.textContent = word.join('');
     }
 
@@ -128,7 +124,7 @@
     }
 
     function isCellClickable(cell) {
-      if (newWord == true && !cell.classList.contains('selected')) return true;
+      if (isNewWord() == true && !cell.classList.contains('selected')) return true;
 
       if (cell == word[word.length - 1]) return true;
       
@@ -151,6 +147,10 @@
 
     // Start new word
     function startNewWord() {
+    }
+
+    function isNewWord() {
+      return (word.length == 0)
     }
 
     // Get random color
