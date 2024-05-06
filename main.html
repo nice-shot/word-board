@@ -66,6 +66,7 @@
     const grid = document.querySelector('.grid');
     const cells = [];
     const selectedCells = [];
+    const word = []
     let selectedColor = 'orange';
     let newWord = true;
 
@@ -83,6 +84,8 @@
         grid.appendChild(cell);
         cells.push(cell);
       }
+
+      updateBoard();
     }
 
     createGridCells();
@@ -91,81 +94,63 @@
     function handleCellClick(event) {
       const cell = event.target;
       const index = cells.indexOf(cell);
-
-      // Disable all cells
-      if (selectedCells.length != 0) {
-        cells.forEach(cell => cell.classList.add('disabled'));
-      }
-
-      // Enable adjacent cells
-      enableAdjacentCells(index);
-
-      // Toggle selected class
-      cell.classList.remove('disabled');
-      cell.classList.toggle('selected');
-
-      // Update selected cells and word
-      if (cell.classList.contains('selected')) {
-        selectedCells.push(cell);
-        cell.style.backgroundColor = selectedColor;
-      } else {
-        selectedCells.splice(selectedCells.indexOf(cell), 1);
+      
+      if (newWord == false && cell == word[word.length - 1]) {
+        word.pop();
+        if (word.length == 0) newWord = true;
         cell.style.backgroundColor = '';
+      } else {
+        word.push(cell);
+        cell.style.backgroundColor = selectedColor;
+        newWord = false
       }
-      updateWord();
+      
+      cell.classList.toggle('selected')
 
+      updateBoard();
     }
     
-    // Enable adjacent cells
-    function enableAdjacentCells(index) {
-      const row = Math.floor(index / 5);
-      const col = index % 5;
-      let curr;
-      
-      // Left cell
-      curr = cells[index - 1];
-      if (col > 0 && !curr.classList.contains('selected')) curr.classList.remove('disabled');
-      
-      // Right cell
-      curr = cells[index + 1];
-      if (col < 4 && !curr.classList.contains('selected')) curr.classList.remove('disabled');
-      
-      // Top cell
-      curr = cells[index - 5];
-      if (row > 0 && !curr.classList.contains('selected')) curr.classList.remove('disabled');
-      
-      // Bottom cell
-      curr = cells[index + 5];
-      if (row < 3 && !curr.classList.contains('selected')) curr.classList.remove('disabled');
-    }
-
-    // Update word with selected letters
-    function updateWord() {
+    function updateWordSign() {
       console.log(selectedCells); 
-      word = '';//selectedCells.join('');
-      for (let i = 0; i < selectedCells.length; i++) {
-        
-        word += selectedCells[i].textContent;
-      }
-      wordElement.textContent = word;
+      wordElement.textContent = word.join('');
     }
 
-    function isCellSelectable(index) {
-      cells[index]
+    function updateBoard() {
+      cells.forEach(updateCell);
+    }
+
+    function updateCell(cell) {
+      if (isCellClickable(cell)) {
+        cell.classList.remove('disabled');
+      } else {
+        cell.classList.add('disabled');
+      }
+    }
+
+    function isCellClickable(cell) {
+      if (newWord == true && !cell.classList.contains('selected')) return true;
+
+      if (cell == word[word.length - 1]) return true;
+      
+      if (!cell.classList.contains('selected')) { 
+          // lead
+          const lIndex = cells.indexOf(word[word.length - 1]);
+          const lRow = Math.floor(lIndex / 5);
+          const lCol = lIndex % 5;
+
+          const nIndex = cells.indexOf(cell);
+          const nRow = Math.floor(nIndex / 5);
+          const nCol = nIndex % 5;
+
+          if (nRow == lRow && (lCol == nCol - 1 || lCol == nCol + 1)) return true;
+          if (lCol == nCol && (lRow == nRow + 1 || lRow == nRow - 1)) return true;
+        }
+
+      return false;
     }
 
     // Start new word
     function startNewWord() {
-      console.log("Hello world!"); 
-      selectedColor = getRandomColor();
-      wordElement.textContent = ''; // Clear the word
-      selectedCells.forEach(cell => {
-        const index = cells.indexOf(cell);
-        cells[index].style.backgroundColor = selectedColor;
-      });
-
-      newWord = true
-      
     }
 
     // Get random color
