@@ -59,14 +59,15 @@
 <body>
   <div class="word"></div>
   <div class="grid"></div>
-  <button onclick="startNewWord()">Start New Word</button>
+  <button onclick="startNewWord()">מילה חדשה</button>
+  <button onclick="cancelSelection()">ביטול</button>
 
   <script>
     const wordElement = document.querySelector('.word');
     const grid = document.querySelector('.grid');
     const cells = [];
     const words = []
-    const word = []
+    let word = []
     let selectedColor = 'orange';
 
     // Create grid cells
@@ -133,7 +134,6 @@
       if (cell == word[word.length - 1]) return true;
       
       if (!cell.classList.contains('selected')) { 
-          // lead
           const lIndex = cells.indexOf(word[word.length - 1]);
           const lRow = Math.floor(lIndex / 5);
           const lCol = lIndex % 5;
@@ -151,6 +151,35 @@
 
     // Start new word
     function startNewWord() {
+      words.push(word);
+      word = [];
+      selectedColor = getRandomColor();
+      updateBoard();
+      updateWordSign();
+    }
+  
+    function cancelSelection() {
+        if (word.length == 0 && words.length != 0) {
+          word = words.pop();
+        }
+
+        removeCurrentWord();
+
+        if (words.length != 0) word = words.pop();
+        if (word.length != 0) selectedColor = word[word.length - 1].style.backgroundColor;
+
+      updateBoard();
+      updateWordSign();
+    }
+
+    function removeCurrentWord() {
+      for (let i = 0; i < word.length; i++) {
+        word[i].style.backgroundColor = ''
+        word[i].classList.remove('disabled');
+        word[i].classList.remove('selected');
+      }
+
+      word = []
     }
 
     function isNewWord() {
