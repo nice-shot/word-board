@@ -127,10 +127,22 @@
     const grid = document.querySelector('.grid');
     const cells = [];
     const words = [];
-    const alphabet = 'ילטראצקיוקמשחתטשמולמ';
-    const solution = ["ארטיק", "מציל", "חול", "שמש", "מטקות"];
+    const atlas = [
+      'ילטראצקיוקמשחתטשמולמ',
+      'כפעבומפוהכטבתנוהנראי',
+      'דימלכסיידיעאהבהגבתיז',
+      'שלאתתימללורוווזכגצדמ',
+    ];
+    const solution = [
+      ["ארטיק", "מציל", "חול", "שמש", "מטקות"],
+      ["מטה", "כפפות", "ארנב", "יונה", "כובע"],
+      ["כלמידיה", "זיבה", "עגבת", "איידס"],
+      ["כריש", "אלמוג", "צוללת", "מדוזות"],
+    ];
+
     let word = []
     let selectedColor = 'orange';
+    let puzzleNumber = 3;
 
     function createGridCells() {
       grid.innerHTML = '';
@@ -138,8 +150,9 @@
 
       for (let i = 0; i < 20; i++) {
         const cell = document.createElement('div');
+        const thisWord =  atlas[puzzleNumber];
         cell.classList.add('cell');
-        cell.textContent = alphabet[i]
+        cell.textContent = thisWord[i];
         cell.addEventListener('click', handleCellClick);
         grid.appendChild(cell);
         cells.push(cell);
@@ -271,8 +284,8 @@
         wrdList.push(translateWordToString(words[i]));
       }
 
-      for (let i = 0; i < solution.length; i++) {
-        if (!wrdList.includes(solution[i])) return false;
+      for (let i = 0; i < solution[puzzleNumber].length; i++) {
+        if (!wrdList.includes(solution[puzzleNumber][i])) return false;
       }
 
       return true;
