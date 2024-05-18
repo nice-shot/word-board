@@ -65,9 +65,54 @@
       height:7vh;
       direction: rtl;
     }
+
+    .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    direction: rtl;
+    line-height: 1.5;
+    background-color: rgba(0, 0, 0, 0.5);
+    /*text-align: center;*/
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 20% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
   </style>
 </head>
 <body>
+  <div id="instructionModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span><br>
+        <p>בלוח האותיות מסתתרות 4-5 מילים עם נושא משותף שמשתמשות בכל אות פעם אחת בלבד ויכולות להיווצר מכל כיוון מלבד אלכסון.<br>על השחקן למצוא את המילים הנכונות ולגלות מהו הנושא המשותף.</p>
+    </div>
+  </div>
+
   <div class="word"></div>
   <div class="grid"></div>
   <button onclick="startNewWord()">מילה חדשה</button>
@@ -256,6 +301,30 @@
         color += letters[Math.floor(Math.random() * 16)];
       }
       return color;
+    }
+
+    // script.js
+    // Get the modal
+    var modal = document.getElementById("instructionModal");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the page loads, display the modal
+    window.onload = function() {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
     }
   </script>
 </body>
