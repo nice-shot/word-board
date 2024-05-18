@@ -118,15 +118,16 @@
   <div class="grid"></div>
   <button onclick="startNewWord()">מילה חדשה</button>
   <button onclick="cancelSelection()">ביטול</button>
+  <button onclick="nextPuzzle()">פאזל הבא</button>
   <div class="wordList"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <script>
+    const numberOfCells = 20;
     const wordElement = document.querySelector('.word');
     const listElement = document.querySelector('.wordList');
     const grid = document.querySelector('.grid');
     const cells = [];
-    const words = [];
     const atlas = [
       'ילטראצקיוקמשחתטשמולמ',
       'כפעבומפוהכטבתנוהנראי',
@@ -139,8 +140,9 @@
       ["כלמידיה", "זיבה", "עגבת", "איידס"],
       ["כריש", "אלמוג", "צוללת", "מדוזות"],
     ];
-
+    
     let word = []
+    let words = [];
     let selectedColor = 'orange';
     let puzzleNumber = 3;
 
@@ -148,17 +150,30 @@
       grid.innerHTML = '';
       cells.length = 0;
 
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < numberOfCells; i++) {
         const cell = document.createElement('div');
         const thisWord =  atlas[puzzleNumber];
         cell.classList.add('cell');
-        cell.textContent = thisWord[i];
         cell.addEventListener('click', handleCellClick);
         grid.appendChild(cell);
         cells.push(cell);
       }
 
+      newPuzzle();
       updateBoard();
+    }
+
+    function newPuzzle() {
+      for (let i = 0; i < numberOfCells; i++) {
+        cells[i].textContent = atlas[puzzleNumber][i];
+        cells[i].style.backgroundColor = ''
+        cells[i].classList.remove('disabled');
+        cells[i].classList.remove('selected');
+      }
+
+      word = []
+      words = []
+      selectedColor = 'orange';
     }
 
     createGridCells();
@@ -177,6 +192,15 @@
       
       cell.classList.toggle('selected')
 
+      updateWordSign();
+      updateBoard();
+    }
+    
+    function nextPuzzle(event) {
+      puzzleNumber = (puzzleNumber + 1) % atlas.length;
+      wordElement.textContent = '';
+      listElement.textContent = '';
+      newPuzzle();
       updateWordSign();
       updateBoard();
     }
