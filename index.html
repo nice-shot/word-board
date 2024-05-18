@@ -74,14 +74,15 @@
   <button onclick="cancelSelection()">ביטול</button>
   <div class="wordList"></div>
 
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <script>
     const wordElement = document.querySelector('.word');
     const listElement = document.querySelector('.wordList');
     const grid = document.querySelector('.grid');
     const cells = [];
-    const words = []
-    const alphabet = 'שלאתתימללורוווזכגצדמ';
-    const solution = ["אלמוג", "מדוזות", "כריש", "צוללת"];
+    const words = [];
+    const alphabet = 'ילטראצקיוקמשחתטשמולמ';
+    const solution = ["ארטיק", "מציל", "חול", "שמש", "מטקות"];
     let word = []
     let selectedColor = 'orange';
 
@@ -139,6 +140,12 @@
       if (!isAnyMovePossible()) {
         if (checkWinCondition()) {
           wordElement.textContent = "ניצחון!!!"
+          confetti({
+            spread: 180,
+            particleCount: 70,
+            origin: { y: -0.1 },
+            startVelocity: -35
+          });
         } else {
           wordElement.textContent = "סורי, לא נכון"
         }
