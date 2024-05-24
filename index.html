@@ -49,7 +49,7 @@
     .cell.disabled {
       cursor: not-allowed;
       pointer-events: none;
-      opacity: 0.5;
+      opacity: 0.65;
     }
 
     button {
@@ -127,6 +127,7 @@
     const wordElement = document.querySelector('.word');
     const listElement = document.querySelector('.wordList');
     const grid = document.querySelector('.grid');
+    const colors = ['#4793AF', '#FFC470', '#DD5746', '#8B322C', '#87A922', '#E178C5'];
     const cells = [];
     const atlas = [
       'ילטראצקיוקמשחתטשמולמ',
@@ -143,8 +144,8 @@
     
     let word = []
     let words = [];
-    let selectedColor = 'orange';
     let puzzleNumber = 3;
+    let currColorIndex = 0;
 
     function createGridCells() {
       grid.innerHTML = '';
@@ -173,7 +174,7 @@
 
       word = []
       words = []
-      selectedColor = 'orange';
+      currColorIndex = 0;
     }
 
     createGridCells();
@@ -187,7 +188,7 @@
         cell.style.backgroundColor = '';
       } else {
         word.push(cell);
-        cell.style.backgroundColor = selectedColor;
+        cell.style.backgroundColor = colors[currColorIndex];
       }
       
       cell.classList.toggle('selected')
@@ -265,20 +266,19 @@
     function startNewWord() {
       words.push(word);
       word = [];
-      selectedColor = getRandomColor();
+      currColorIndex = (currColorIndex + 1) % colors.length;
+      console.log(currColorIndex);
       updateBoard();
       updateWordSign();
     }
   
     function cancelSelection() {
-        if (word.length == 0 && words.length != 0) {
-          word = words.pop();
-        }
+        if (word.length == 0 && words.length != 0) {word = words.pop(); currColorIndex -= 1;}
 
         removeCurrentWord();
 
-        if (words.length != 0) word = words.pop();
-        if (word.length != 0) selectedColor = word[word.length - 1].style.backgroundColor;
+        if (words.length != 0) {word = words.pop(); currColorIndex -= 1;}
+        if (word.length != 0) {selectedColor = word[word.length - 1].style.backgroundColor;}
 
       updateBoard();
       updateWordSign();
@@ -326,15 +326,6 @@
       }
 
       return s;
-    }
-
-    function getRandomColor() {
-      const letters = '0123456789ABCDEF';
-      let color = '#';
-      for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
     }
 
     // Introduction instructions popup
