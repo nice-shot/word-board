@@ -325,7 +325,32 @@
         s += wordArr[i].textContent;
       }
 
-      return s;
+      return fixFinalForms(s);
+    }
+
+    function fixFinalForms(str) {
+      const finalForms = {
+          'כ': 'ך',
+          'מ': 'ם',
+          'נ': 'ן',
+          'פ': 'ף',
+          'צ': 'ץ'
+      };
+      let result = '';
+      
+      for (let i = 0; i < str.length; i++) {
+        let currentChar = str[i];
+        let nextChar = str[i + 1];
+        let prevChar = str[i - 1];
+        
+        if (finalForms[currentChar] && (!nextChar || nextChar === ' ') && (prevChar && prevChar != ' ')){
+          result += finalForms[currentChar];
+        } else {
+          result += currentChar;
+        }
+      }
+          
+      return result;
     }
 
     // Introduction instructions popup
